@@ -14,7 +14,7 @@ class ExpenseTrackerApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: Colors.transparent, // ✅ allow image to show
+        scaffoldBackgroundColor: Colors.transparent,
         colorScheme: ColorScheme.light(
           primary: AppColors.primary,
           secondary: AppColors.secondary,
@@ -27,10 +27,12 @@ class ExpenseTrackerApp extends StatelessWidget {
           foregroundColor: AppColors.textDark,
           elevation: 0,
         ),
-        cardTheme: CardTheme(
+        cardTheme: const CardThemeData( // ✅ fixed here
           color: AppColors.cardBackground,
           elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: AppColors.primary,
@@ -60,6 +62,7 @@ class ExpenseTrackerApp extends StatelessWidget {
           bodyMedium: TextStyle(color: AppColors.textDark),
         ),
       ),
+
 
       // ✅ Custom home with background + centered layout
       home: Container(
