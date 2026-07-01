@@ -1,18 +1,18 @@
 // Home Page
-import 'package:expense_tracker/pages/Budget.dart';
-import 'package:expense_tracker/pages/Dashboard.dart';
-import 'package:expense_tracker/pages/Expenses.dart';
-import 'package:expense_tracker/pages/Insights.dart';
-import 'package:expense_tracker/services/AIFinanceService.dart';
-import 'package:expense_tracker/services/Add%20Expense.dart';
-import 'package:expense_tracker/services/DataService.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:expense_tracker/pages/budget.dart';
+import 'package:expense_tracker/pages/dashboard.dart';
+import 'package:expense_tracker/pages/expenses.dart';
+import 'package:expense_tracker/pages/graph.dart';
+import 'package:expense_tracker/pages/insights.dart';
+import 'package:expense_tracker/services/ai_finance_service.dart';
+import 'package:expense_tracker/services/add_expense.dart';
+import 'package:expense_tracker/services/data_service.dart';
 import 'package:flutter/material.dart';
 
-import 'constant/AppColor.dart';
+import 'constant/app_color.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -26,7 +26,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final pages = [
-      DashboardPage(dataService: _dataService, aiService: _aiService),
+      DashboardPage(
+        dataService: _dataService,
+        aiService: _aiService,
+        onRefresh: () => setState(() {}),
+      ),
+      GraphPage(dataService: _dataService),
       ExpensesPage(dataService: _dataService, aiService: _aiService),
       InsightsPage(dataService: _dataService, aiService: _aiService),
       BudgetPage(dataService: _dataService),
@@ -38,12 +43,17 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) => setState(() => _selectedIndex = index),
         backgroundColor: AppColors.cardBackground,
-        indicatorColor: AppColors.primary.withOpacity(0.2),
+        indicatorColor: AppColors.primary.withValues(alpha: 0.2),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
             selectedIcon: Icon(Icons.dashboard, color: AppColors.primary),
             label: 'Dashboard',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart, color: AppColors.primary),
+            label: 'Analytics',
           ),
           NavigationDestination(
             icon: Icon(Icons.receipt_long_outlined),
@@ -62,7 +72,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: _selectedIndex == 1 ? FloatingActionButton(
+      floatingActionButton: _selectedIndex == 2 ? FloatingActionButton(
         onPressed: () => _showAddExpenseDialog(context),
         child: const Icon(Icons.add),
       ) : null,

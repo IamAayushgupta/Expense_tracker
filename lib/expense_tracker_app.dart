@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Home.dart';
-import 'constant/AppColor.dart';
+import 'constant/app_color.dart';
+import 'home.dart';
 
 class ExpenseTrackerApp extends StatelessWidget {
-  const ExpenseTrackerApp({Key? key}) : super(key: key);
+  const ExpenseTrackerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +14,10 @@ class ExpenseTrackerApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: Colors.transparent,
-        colorScheme: ColorScheme.light(
+        colorScheme: const ColorScheme.light(
           primary: AppColors.primary,
           secondary: AppColors.secondary,
           surface: AppColors.cardBackground,
-          background: AppColors.background,
         ),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(

@@ -1,15 +1,14 @@
 // Budget Page
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/AppColor.dart';
-import '../services/DataService.dart';
-import '../services/budget.dart';
+import '../constant/app_color.dart';
+import '../model/budget.dart';
+import '../services/data_service.dart';
 
 class BudgetPage extends StatefulWidget {
   final DataService dataService;
 
-  const BudgetPage({Key? key, required this.dataService}) : super(key: key);
+  const BudgetPage({super.key, required this.dataService});
 
   @override
   State<BudgetPage> createState() => _BudgetPageState();
@@ -27,6 +26,8 @@ class _BudgetPageState extends State<BudgetPage> {
     'Shopping': 2000,
     'Entertainment': 1000,
     'Groceries': 1000,
+    'Bills & Utilities': 2000,
+    'Health & Fitness': 1000,
   };
 
   @override
@@ -164,15 +165,44 @@ class _BudgetPageState extends State<BudgetPage> {
     );
   }
 
-  void _saveBudget() {
-    final income = double.tryParse(_incomeController.text) ?? 15000;
-    final savings = double.tryParse(_savingsController.text) ?? 1000;
+  void _saveBudget() async {
+    final income = double.tryParse(_incomeController.text);
+    final savings = double.tryParse(_savingsController.text);
+
+    if (income == null || income <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid monthly income greater than 0'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (savings == null || savings < 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid positive savings goal'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     // Use provided or ideal values for each category
     final updatedLimits = <String, double>{};
     for (final category in _categoryControllers.keys) {
       final value = double.tryParse(_categoryControllers[category]!.text);
-      updatedLimits[category] = value ?? _idealLimits[category]!;
+      if (value == null || value < 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please enter a valid positive limit for $category'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      updatedLimits[category] = value;
     }
 
     final newBudget = Budget(
@@ -181,7 +211,8 @@ class _BudgetPageState extends State<BudgetPage> {
       savingsGoal: savings,
     );
 
-    setState(() => widget.dataService.updateBudget(newBudget));
+    await widget.dataService.updateBudget(newBudget);
+    if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

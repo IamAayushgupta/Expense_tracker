@@ -1,7 +1,7 @@
 // main.dart
-import 'package:expense_tracker/services/DataService.dart';
+import 'package:expense_tracker/services/data_service.dart';
 import 'package:flutter/material.dart';
-import 'ExpenseTrackerApp.dart';
+import 'expense_tracker_app.dart';
 
 
 void main() async {
